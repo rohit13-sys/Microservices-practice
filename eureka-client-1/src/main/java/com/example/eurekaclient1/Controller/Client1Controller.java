@@ -1,15 +1,16 @@
 package com.example.eurekaclient1.Controller;
 
+import com.example.eurekaclient1.Modal.UserModal;
+import jdk.jshell.spi.ExecutionControl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class Client1Controller {
-
 
     @Autowired
     private RestTemplate restTemplate;
@@ -18,18 +19,39 @@ public class Client1Controller {
     private KafkaTemplate<String, String> kafkaTemplate;
 
 
-    @GetMapping("/client-2")
-    public String client2(){
-//        kafkaTemplate.send("client-2", "hey i am client -1 i want to call client-2");
-        ResponseEntity<String> response=restTemplate.getForEntity("http://client-2",String.class);
-        return response.getBody();
+    @GetMapping("/")
+    public String hello(){
+        return "Hello i am client-1";
+    }
+
+
+    @PostMapping("/client-2/user")
+    public String client2(@RequestBody UserModal user){
+
+        HttpEntity<UserModal> request =
+                new HttpEntity<>(user);
+        kafkaTemplate.send("client-2", "hey i am client -1 i want to call client-2");
+        try{
+            ResponseEntity<String> response=restTemplate.postForEntity("http://client-2/user",request, String.class);
+            return response.getBody().toString();
+        }catch (Exception e){
+            e.printStackTrace();
+            return "Some exception Occurred";
+        }
+
+
+
     }
 
 
     @GetMapping("/client-3")
     public String client3(){
-//        kafkaTemplate.send("client-3", "hey i am client -1 i want to call client-3");
+        kafkaTemplate.send("client-3", "hey i am client -1 i want to call client-3");
         ResponseEntity<String> response=restTemplate.getForEntity("http://client-3",String.class);
         return response.getBody();
     }
+
+
+
+
 }
