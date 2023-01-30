@@ -47,7 +47,7 @@ public class Client1Controller {
     @GetMapping("/client-3")
     public String client3(){
         kafkaTemplate.send("client-3", "hey i am client -1 i want to call client-3");
-        ResponseEntity<String> response=restTemplate.getForEntity("http://client-3",String.class);
+        ResponseEntity<String> response=restTemplate.getForEntity("http://client-3/",String.class);
         return response.getBody();
     }
 
