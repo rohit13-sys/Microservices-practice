@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +39,24 @@ public class Client2Controller {
     @PostMapping("/user")
     public String userData(@RequestBody UserModel data){
 //        ModelMapper map=new ModelMapper();
-        UserModel user=new UserModel();
+//        UserModel user=new UserModel();
 //        map.map(data,user);
-        ObjectMapper map=new ObjectMapper();
-        user=map.convertValue(data,UserModel.class);
+//        ObjectMapper map=new ObjectMapper();
+//        user=map.convertValue(data,UserModel.class);
 //        user.setUserName(user.getUserName());
 //        user.setPassword(user.getPassword());
-        userService.createUser(user);
+        userService.createUser(data);
         return "Data inserted";
+    }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserModel data){
+        boolean isUserExist=userService.findByUsername(data);
+        if(isUserExist){
+            return new ResponseEntity<>("Your credentials are matched",HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>("Your credentials are not matched",HttpStatus.BAD_REQUEST);
+
     }
 }
