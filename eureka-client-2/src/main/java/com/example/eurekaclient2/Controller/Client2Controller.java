@@ -37,16 +37,12 @@ public class Client2Controller {
     }
 
     @PostMapping("/user")
-    public String userData(@RequestBody UserModel data){
-//        ModelMapper map=new ModelMapper();
-//        UserModel user=new UserModel();
-//        map.map(data,user);
-//        ObjectMapper map=new ObjectMapper();
-//        user=map.convertValue(data,UserModel.class);
-//        user.setUserName(user.getUserName());
-//        user.setPassword(user.getPassword());
-        userService.createUser(data);
-        return "Data inserted";
+    public ResponseEntity<String> userData(@RequestBody UserModel data){
+        UserModel user=userService.createUser(data);
+        if(user==null){
+            return new ResponseEntity<>("User Already Exist!!!!!!!",HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok("User Created");
     }
 
 

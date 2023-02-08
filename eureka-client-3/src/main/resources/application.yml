@@ -1,0 +1,26 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: client-3
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: xyz
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      properties:
+#        spring:
+#          json:
+#            trusted:
+#              packages: "com.example.eurekaclient1.Modal.JsonPayload"
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultzone: http://localhost:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
