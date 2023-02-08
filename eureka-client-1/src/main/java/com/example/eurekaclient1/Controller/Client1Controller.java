@@ -45,11 +45,12 @@ public class Client1Controller {
         }
     }
 
-    @GetMapping("/client-3")
+    @GetMapping("/sendClient-3")
     public String client3() {
         kafkaTemplate.send("client-3", "hey i am client -1 i want to call client-3");
-        ResponseEntity<String> response = restTemplate.getForEntity("http://client-3/", String.class);
-        return response.getBody();
+//        ResponseEntity<String> response = restTemplate.getForEntity("http://client-3/", String.class);
+//        return response.getBody();
+        return "Message to client-3 sent successfully";
     }
 
     @PostMapping("/jsonpayload")

@@ -34,6 +34,6 @@ public class EurekaClient1Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		kafkaProducerService.sendMessage();
+//		kafkaProducerService.sendMessage();
 	}
 }

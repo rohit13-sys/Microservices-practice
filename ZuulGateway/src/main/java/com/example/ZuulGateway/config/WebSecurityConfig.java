@@ -51,18 +51,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-// We don't need CSRF for this example
-        httpSecurity.cors().and().csrf().disable();
 
-// dont authenticate this particular request
-        httpSecurity.authorizeRequests().antMatchers("/authenticate").permitAll().
 
-// all other requests need to be authenticated
-        anyRequest().authenticated();
-        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        // dont authenticate this particular request
+        httpSecurity.csrf().disable().authorizeRequests().antMatchers("/authenticate").permitAll()
+                .and().authorizeRequests().antMatchers("/actuator/**").permitAll()
+                // all other requests need to be authenticated
+                .anyRequest().authenticated();
 //        httpSecurity.csrf().disable().authorizeRequests().antMatchers("/client-1/**").authenticated()
 //                .and().authorizeRequests().antMatchers("/client-2/**/").authenticated().and()
 //                        .authorizeRequests().antMatchers("/client-3/**").authenticated().anyRequest().authenticated();
+
+//make the session stateless so token should not be stored in cookies
+        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 
 // Add a filter to validate the tokens with every request
